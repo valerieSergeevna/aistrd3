@@ -4,28 +4,28 @@
 #include <stdexcept>
 
 
-template <typename T, typename T2 >
-map<T, T2>::map()
+template <typename T >
+map<T>::map()
 {
 	reset_list();
 	size = 0;
 }
 
-template <typename T, typename T2 >
-map<T, T2>::~map()
+template <typename T>
+map<T>::~map()
 {
 	clear();
 }
-template <typename T, typename T2 >
-void map<T, T2>::add_first(T key, T2 val)
+template <typename T >
+void map<T>::add_first(T key)
 {
 
-	root = new node(key, val);
+	root = new node(key);
 	root->parent = nullptr;
 	size++;
 }
-template <typename T, typename T2 >
-void map<T, T2>::remove(T key)
+template <typename T>
+void map<T>::remove(T key)
 {
 	if (this->root == nullptr)
 	{
@@ -90,8 +90,8 @@ void map<T, T2>::remove(T key)
 	}
 	size--;
 }
-template <typename T, typename T2 >
-void map<T, T2>::delfix(node *fixable)
+template <typename T >
+void map<T>::delfix(node *fixable)
 {
 	node *sibling;
 	while (fixable != root && fixable->color == 0)
@@ -162,8 +162,8 @@ void map<T, T2>::delfix(node *fixable)
 		root->color = 0;
 	}
 }
-template <typename T, typename T2 >
-T2 map<T, T2>::find(T key)
+/*template <typename T >
+T map<T>::find(T key)
 {
 	if (this->root == nullptr)
 	{
@@ -174,10 +174,10 @@ T2 map<T, T2>::find(T key)
 	for (; it != nullptr; it++)
 		if (it.current_key() == key) return *it;
 	throw out_of_range("error");
-}
+}*/
 
-template<typename T, typename T2>
-List<T> map<T, T2>::get_keys()
+template<typename T>
+List<T> map<T>::get_keys()
 {
 	List <T> list;
 	if (this->root == nullptr)
@@ -192,8 +192,8 @@ List<T> map<T, T2>::get_keys()
 
 
 
-template <typename T, typename T2 >
-void map<T, T2>::get_value()
+template <typename T >
+void map<T>::get_value()
 {
 	if (this->root == nullptr)
 	{
@@ -207,23 +207,23 @@ void map<T, T2>::get_value()
 
 }
 
-template <typename T, typename T2 >
-void map<T, T2>::clear()
+template <typename T>
+void map<T>::clear()
 {
 	while (size > 0)
 		remove(root->key);
 }
 
-template <typename T, typename T2 >
-void map<T, T2>::reset_list()
+template <typename T>
+void map<T>::reset_list()
 {
 	//	cur = nullptr;
 	root = nullptr;
 }
 
 
-template <typename T, typename T2 >
-typename map<T, T2>::node * map<T, T2>::get_successor(node *current)
+template <typename T>
+typename map<T>::node * map<T>::get_successor(node *current)
 {
 	node *successor = nullptr;
 	if (current->next_left != nullptr)
@@ -242,8 +242,8 @@ typename map<T, T2>::node * map<T, T2>::get_successor(node *current)
 }
 
 
-template <typename T, typename T2 >
-void map<T, T2>::insert(T key) {
+template <typename T>
+void map<T>::insert(T key) {
 
 	node *temp, *prev;
 	node *current = new node(key);
@@ -284,8 +284,8 @@ void map<T, T2>::insert(T key) {
 	size++;
 }
 
-template <typename T, typename T2 >
-void map<T, T2>::insertfix(node *current) {
+template <typename T >
+void map<T>::insertfix(node *current) {
 	node *uncle;
 	if (root == current)
 	{
@@ -350,8 +350,8 @@ void map<T, T2>::insertfix(node *current) {
 
 }
 
-template <typename T, typename T2 >
-void map<T, T2>::leftrotate(node *current)
+template <typename T >
+void map<T>::leftrotate(node *current)
 {
 	if (current->next_right == nullptr)
 		return;
@@ -381,8 +381,8 @@ void map<T, T2>::leftrotate(node *current)
 	}
 }
 
-template <typename T, typename T2 >
-void map<T, T2>::rightrotate(node *current)
+template <typename T >
+void map<T>::rightrotate(node *current)
 {
 	if (current->next_left == nullptr)
 		return;

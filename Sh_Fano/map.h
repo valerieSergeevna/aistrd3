@@ -47,7 +47,7 @@ queue<item>::~queue()
 	free(Queue);
 }
 
-template <typename T, typename T2 >
+template <typename T >
 class map //на map
 {
 private:
@@ -88,8 +88,10 @@ public:
 	public:
 		bool operator==(const nullptr_t) const override { return current == nullptr; }
 		bool operator!=(const nullptr_t) const override { return !operator==(nullptr); }
-		T2 operator*() const override { return current->frequancy; }
-		T current_key() { return current->key; }
+		size_t operator*() const override
+		{ return current->frequancy; }
+		T current_key() 
+		{ return current->key; }
 		bool current_color() { return current->color; }
 
 	};
@@ -113,10 +115,10 @@ public:
 	node *get_successor(node *);
 
 	//void add_first(node*); перенести в приват
-	void add_first(T, T2);
+	void add_first(T);
 	void remove(T);
 	void delfix(node*);
-	T2 find(T);
+	//T2 find(T);
 
 	List <T> get_keys();
 	T get_colors();
@@ -132,8 +134,8 @@ public:
 
 
 
-template<typename T, typename T2>
-void map<T, T2>::BftIterator::operator++(int)
+template<typename T>
+void map<T>::BftIterator::operator++(int)
 {
 	if (this->current->next_left != nullptr)
 		nodes.push(this->current->next_left);

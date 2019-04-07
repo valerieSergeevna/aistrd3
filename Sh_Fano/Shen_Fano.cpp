@@ -5,7 +5,7 @@
 
 Shen_Fano_code::Shen_Fano_code(string &str)
 {
-	map < char, size_t> Map;
+	map < char> Map;
 
 	size_t i = 0;
 	while (i != str.length())

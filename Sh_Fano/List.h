@@ -18,7 +18,7 @@ private:
 			this->next = next;
 			this->prev = nullptr;
 			this->freq = fr;
-			this->code = nullptr;
+			this->code = NULL;
 		}
 
 		T data;
