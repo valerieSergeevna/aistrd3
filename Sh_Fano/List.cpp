@@ -1,9 +1,36 @@
 #include "List.h"
-//#include <iostream>
+#include <iostream>
+#include <string>
 #include <stdexcept>
+#include <math.h>
 
 
 using namespace std;
+
+template<typename T>
+size_t List<T>::counting_average_frequancy(Node* first, Node*last)
+{
+	Node* cur =first;
+	size_t sum = 0;
+	while (cur != last->next)
+	{
+
+		sum += cur->freq;
+		cur = cur->next;
+	}
+	return round(sum/2.0);
+}
+
+template<typename T>
+void List<T>::set_code(Node *first, Node *last, char sign)
+{
+	Node* cur = first;
+	while (cur != last)
+	{
+		cur->code += sign;
+		cur = cur->prev;
+	}
+}
 
 template<typename T>
 List<T>::List()
@@ -36,7 +63,7 @@ void List<T>::push_back(T newElem, size_t freq)
 
 		tail->next = new Node(newElem, freq);
 		tail->next->prev = tail;
-		//tail = tail->next;
+		tail = tail->next;
 	}
 	size++;
 
@@ -107,6 +134,18 @@ void List<T>::pop_front()
 	size--;
 }
 template<typename T>
+void List<T>::print()
+{
+	Node * cur = tail;
+	while (cur != nullptr)
+	{
+		cout << cur->data ;
+		cout << '-' << cur->code << '-'<< cur-> freq <<'\n';
+		cur = cur->prev;
+	}
+	
+}
+template<typename T>
 T List<T>::at(size_t index) const
 {
 	if (index >= size) {
@@ -153,7 +192,7 @@ void List<T>::set(size_t index, T newElem)
 template<typename T>
 void List<T>::clear()
 {
-	Node * cur = head;
+	/*Node * cur = head;
 	while (cur != nullptr)
 	{
 		Node * next = cur->next;
@@ -162,7 +201,17 @@ void List<T>::clear()
 	}
 	head = tail = nullptr;
 	size = 0;
-
+	*/
+	Node* cur = head;
+	while (cur != nullptr)
+	{
+		Node* next = cur->next;
+		cur = nullptr;
+		delete cur;
+		cur = next;
+	}
+	head = tail = nullptr;
+	size = 0;
 }
 
 
@@ -264,7 +313,7 @@ void List<T>::sorting(Node* left, Node* right)
 	T inf;
 	while (1)
 	{
-		if (start->freq < cur->freq)
+		if (start->freq >= cur->freq)
 		{
 			frequancy = cur->freq;
 			inf = cur->data;
@@ -297,5 +346,38 @@ void List<T>::sorting(Node* left, Node* right)
 		if ((cur->prev != right) && (right->next != cur))
 			sorting(cur, right);
 
+	}
+}
+
+template<typename T>
+void List<T>::make_group(Node *first, Node *last)
+{
+	if (last == first) return; //   a - 8 - 0  b - 2 - 1
+	if (last->prev == first) { first->code += '0'; last->code += '1';}
+	else
+	{
+		Node* cur = first;
+		Node* merge = nullptr;
+		size_t sum = 0;
+		size_t check = counting_average_frequancy(first, last);
+		while (cur != last->next)
+		{
+			//aaaaaaaabb a - 8 0.8  b - 2 0.2 all - 10 check - 5 0.5 a - 0 b - 1
+			sum += cur->freq;
+			if (sum <= check || merge == nullptr)
+			{
+				cur->code += '0';
+				merge = cur;
+			}
+			else
+			{
+				cur->code += '1';
+			
+			}
+			cur = cur->next;
+		}
+		//if (merge == nullptr) merge = first->next;
+		make_group(first, merge);
+		make_group(merge->next, last);
 	}
 }

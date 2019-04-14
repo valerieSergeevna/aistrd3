@@ -9,7 +9,6 @@ class Shen_Fano_code
 private:
 	//string  str;
 	List <char> sort;
-	void make_group();
 public:
 	Shen_Fano_code(string&);
 	~Shen_Fano_code() {};

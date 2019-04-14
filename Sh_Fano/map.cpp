@@ -1,5 +1,6 @@
 #include "map.h"
 
+
 #include "Iterator.h"
 #include <stdexcept>
 
@@ -14,7 +15,7 @@ map<T>::map()
 template <typename T>
 map<T>::~map()
 {
-	clear();
+	//clear();
 }
 template <typename T >
 void map<T>::add_first(T key)
@@ -85,8 +86,9 @@ void map<T>::remove(T key)
 			current->key = successor->key;
 			current->frequancy = successor->frequancy;
 		}
-		if (successor->color == 0)
-			delfix(temp);
+		if (temp != nullptr)
+			if (successor->color == 0)
+				delfix(temp);
 	}
 	size--;
 }
@@ -186,7 +188,7 @@ List<T> map<T>::get_keys()
 	}
 	auto it = create_bft_iterator();
 	for (; it != nullptr; it++)
-		list.push_front(it.current_key(), *it);
+		list.push_back(it.current_key(), *it);
 	return list;
 }
 
@@ -253,6 +255,7 @@ void map<T>::insert(T key) {
 	{
 		root = current;
 		current->parent = nullptr;
+		current->frequancy++;
 	}
 	else
 	{
@@ -267,7 +270,10 @@ void map<T>::insert(T key) {
 			
 		}
 
-		if ((temp!= nullptr) && (temp->key == current->key)) { temp->frequancy++; return; }
+		if ((temp!= nullptr) && (temp->key == current->key)) { 
+			temp->frequancy++; 
+			return; 
+		}
 		else 
 		{
 			current->parent = prev;
@@ -285,69 +291,128 @@ void map<T>::insert(T key) {
 }
 
 template <typename T >
-void map<T>::insertfix(node *current) {
-	node *uncle;
-	if (root == current)
-	{
-		current->color = 0;
-		return;
-	}
-	while (current->parent != nullptr && current->parent->color == 1)
-	{
-		node *granny = current->parent->parent;
-		if (granny->next_left == current->parent)
-		{
-			if (granny->next_right != nullptr)
-			{
-				uncle = granny->next_right;
-				if (uncle->color == 1)
-				{
-					current->parent->color = 0;
+void map<T>::insertfix(node *&current) {
+	//node *uncle;
+	//if (root == current)
+	//{
+	//	current->color = 0;
+	//	return;
+	//}
+	//while (current != root && current != nullptr && current->color ==1 && 
+	//	current->parent != nullptr && current->parent->color == 1)
+	//{
+	//	node *granny = current->parent->parent;
+	//	node *parent = current->parent;
+	//	if (granny->next_left == parent)
+	//	{
+	//		if (granny->next_right != nullptr)
+	//		{
+	//			uncle = granny->next_right;
+	//			if (uncle->color == 1)
+	//			{
+	//				parent->color = 0;
+	//				uncle->color = 0;
+	//				granny->color = 1;
+	//				current = granny;
+	//			}
+	//		}
+	//		else
+	//		{
+	//			if (parent->next_right == current)
+	//			{
+	//				leftrotate(current);
+	//				current = parent;
+	//				parent = current->parent;					
+	//			}
+	//			rightrotate(granny);
+	//			//parent->color = 0;//????
+	//			//granny->color = 1;
+	//			
+	//			swap(parent->color, granny->color);
+	//			current = parent;
+	//		}
+	//	}
+	//	else
+	//	{
+	//		if (granny->next_left != nullptr)
+	//		{
+	//			uncle = granny->next_left;
+	//			if (uncle->color == 1)
+	//			{
+	//				parent->color = 0;
+	//				uncle->color = 0;
+	//				granny->color = 1;
+	//				current = granny;
+	//			}
+	//		}
+	//		else
+	//		{
+	//			if (parent->next_left == current)
+	//			{
+	//				rightrotate(current);
+	//				current = parent;
+	//				parent = current->parent;
+	//				
+	//			}
+	//			leftrotate(granny);
+	//		/*	parent->color = 0;
+	//			granny->color = 1;*/
+	//			swap(parent->color, granny->color);
+	//			current = parent;
+	//			
+	//		}
+	//	}
+	//	
+	//}
+	//root->color = 0;
+	node* parent = nullptr;
+	node* grandparent = nullptr;
+	while (current != root && current->color == 1 && current->parent->color == 1) {
+		parent = current->parent;
+		grandparent = parent->parent;
+		if (parent == grandparent->next_left) {
+				node* uncle = grandparent->next_right;
+				if (uncle != nullptr && uncle->color == 1) {
 					uncle->color = 0;
-					granny->color = 1;
-					current = granny;
+					parent->color = 0;
+					grandparent->color = 1;
+					current = grandparent;
 				}
-			}
-			else
-			{
-				if (current->parent->next_right == current)
-				{
-					current = current->parent;
-					leftrotate(current);
+				else {
+					if (current == parent->next_right) {
+						leftrotate(parent);
+						current = parent;
+						parent = current->parent;
+					}
+					rightrotate(grandparent);
+					swap(parent->color, grandparent->color);
+					current = parent;
 				}
-				current->parent->color = 0;
-				granny->color = 1;
-				rightrotate(granny);
-			}
+			
 		}
-		else
-		{
-			if (granny->next_left != nullptr)
-			{
-				uncle = granny->next_left;
-				if (uncle->color == 1)
-				{
-					current->parent->color = 0;
-					uncle->color = 0;
-					granny->color = 1;
-					current = granny;
-				}
-			}
-			else
-			{
-				if (current->parent->next_left == current)
-				{
-					current = current->parent;
-					rightrotate(current);
-				}
-				current->parent->color = 0;
-				granny->color = 1;
-				leftrotate(granny);
-			}
-		}
-		root->color = 0;
-	}
+		else {
 
+				node* uncle = grandparent->next_left;
+				if (uncle != nullptr && uncle->color == 1) {
+					uncle->color = 0;
+					parent->color = 0;
+					grandparent->color = 1;
+					current = grandparent;
+				}
+				else {
+					if (current == parent->next_left) {
+						rightrotate(parent);
+						current = parent;
+						parent = current->parent;
+					}
+					leftrotate(grandparent);
+					swap(parent->color, grandparent->color);
+					current = parent;
+				}
+			
+		}
+	}
+	root->color =  0;
 }
 
 template <typename T >

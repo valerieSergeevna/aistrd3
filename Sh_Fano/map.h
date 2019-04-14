@@ -80,6 +80,7 @@ private:
 public:
 	map();
 	~map();
+
 	class TreeIterator : public Iterator<T> {
 	protected:
 		node *current;
@@ -125,10 +126,9 @@ public:
 	void get_value();
 	void clear();
 	void insert(T);
-	void insertfix(node *t);
+	void insertfix(node *&t);
 	void leftrotate(node *);
 	void rightrotate(node *);
-
 	BftIterator create_bft_iterator() { return BftIterator(root, size); }
 };
 

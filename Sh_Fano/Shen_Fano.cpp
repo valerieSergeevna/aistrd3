@@ -19,7 +19,12 @@ Shen_Fano_code::Shen_Fano_code(string &str)
 
 void Shen_Fano_code::encode()
 {
-	
+	sort.make_group( sort.get_front(), sort.get_back());
+}
+
+void Shen_Fano_code::get_table()
+{
+	sort.print();
 }
 
 
