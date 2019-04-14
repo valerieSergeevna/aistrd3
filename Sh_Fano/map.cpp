@@ -1,6 +1,4 @@
 #include "map.h"
-
-
 #include "Iterator.h"
 #include <stdexcept>
 
@@ -164,6 +162,19 @@ void map<T>::delfix(node *fixable)
 		root->color = 0;
 	}
 }
+template<typename T>
+typename map<T>::node * map<T>::find(T key)
+{
+	if (this->root == nullptr)
+	{
+		throw out_of_range("error");
+	}
+
+	auto it = create_bft_iterator();
+	for (; it != nullptr; it++)
+		if (it.current_key() == key) return it.get_cur();
+	throw out_of_range("error");
+}
 /*template <typename T >
 T map<T>::find(T key)
 {
@@ -245,10 +256,11 @@ typename map<T>::node * map<T>::get_successor(node *current)
 
 
 template <typename T>
-void map<T>::insert(T key) {
+void map<T>::insert(T key)
+{
 
-	node *temp, *prev;
-	node *current = new node(key);
+	node* temp, *prev;
+	node* current = new node(key);
 	temp = root;
 	prev = nullptr;
 	if (root == nullptr)
@@ -259,7 +271,7 @@ void map<T>::insert(T key) {
 	}
 	else
 	{
-		while (temp != nullptr )
+		while (temp != nullptr)
 		{
 			if (temp->key == current->key) break;
 			prev = temp;
@@ -267,14 +279,13 @@ void map<T>::insert(T key) {
 				temp = temp->next_right;
 			else
 				temp = temp->next_left;
-			
 		}
 
-		if ((temp!= nullptr) && (temp->key == current->key)) { 
-			temp->frequancy++; 
-			return; 
+		if ((temp != nullptr) && (temp->key == current->key)) {
+			temp->frequancy++;
+			return;
 		}
-		else 
+		else
 		{
 			current->parent = prev;
 			if (prev->key < current->key)
@@ -283,7 +294,6 @@ void map<T>::insert(T key) {
 				prev->next_left = current;
 			current->frequancy++;
 		}
-		
 	}
 
 	insertfix(current);
@@ -371,108 +381,88 @@ void map<T>::insertfix(node *&current) {
 		parent = current->parent;
 		grandparent = parent->parent;
 		if (parent == grandparent->next_left) {
-				node* uncle = grandparent->next_right;
-				if (uncle != nullptr && uncle->color == 1) {
-					uncle->color = 0;
-					parent->color = 0;
-					grandparent->color = 1;
-					current = grandparent;
-				}
-				else {
-					if (current == parent->next_right) {
-						leftrotate(parent);
-						current = parent;
-						parent = current->parent;
-					}
-					rightrotate(grandparent);
-					swap(parent->color, grandparent->color);
+			node* uncle = grandparent->next_right;
+			if (uncle != nullptr && uncle->color == 1) {
+				uncle->color = 0;
+				parent->color = 0;
+				grandparent->color = 1;
+				current = grandparent;
+			}
+			else {
+				if (current == parent->next_right) {
+					leftrotate(parent);
 					current = parent;
+					parent = current->parent;
 				}
-			
+				rightrotate(grandparent);
+				swap(parent->color, grandparent->color);
+				current = parent;
+			}
 		}
 		else {
-
-				node* uncle = grandparent->next_left;
-				if (uncle != nullptr && uncle->color == 1) {
-					uncle->color = 0;
-					parent->color = 0;
-					grandparent->color = 1;
-					current = grandparent;
-				}
-				else {
-					if (current == parent->next_left) {
-						rightrotate(parent);
-						current = parent;
-						parent = current->parent;
-					}
-					leftrotate(grandparent);
-					swap(parent->color, grandparent->color);
+			node* uncle = grandparent->next_left;
+			if (uncle != nullptr && uncle->color == 1) {
+				uncle->color = 0;
+				parent->color = 0;
+				grandparent->color = 1;
+				current = grandparent;
+			}
+			else {
+				if (current == parent->next_left) {
+					rightrotate(parent);
 					current = parent;
+					parent = current->parent;
 				}
-			
+				leftrotate(grandparent);
+				swap(parent->color, grandparent->color);
+				current = parent;
+			}
 		}
 	}
-	root->color =  0;
+	root->color = 0;
 }
 
 template <typename T >
 void map<T>::leftrotate(node *current)
 {
-	if (current->next_right == nullptr)
-		return;
+	node* right_child = current->next_right;
+	current->next_right = right_child->next_left;
+
+	if (current->next_right != nullptr)
+		current->next_right->parent = current;
+
+	right_child->parent = current->parent;
+
+	if (current->parent == nullptr)
+		root = right_child;
+	else if (current == current->parent->next_left)
+		current->parent->next_left = right_child;
 	else
-	{
-		node *child = current->next_right;
-		if (child->next_left != nullptr)
-		{
-			current->next_right = child->next_left;
-			child->next_left->parent = current;
-		}
-		else
-			current->next_right = nullptr;
-		if (current->parent != nullptr)
-			child->parent = current->parent;
-		if (current->parent == nullptr)
-			root = child;
-		else
-		{
-			if (current == current->parent->next_left)
-				current->parent->next_left = child;
-			else
-				current->parent->next_right = child;
-		}
-		child->next_left = current;
-		current->parent = child;
-	}
+		current->parent->next_right = right_child;
+
+	right_child->next_left = current;
+	current->parent = right_child;
 }
 
 template <typename T >
-void map<T>::rightrotate(node *current)
+void map<T>::rightrotate(node * current)
 {
-	if (current->next_left == nullptr)
-		return;
+	node* left_child = current->next_left;
+	current->next_left = left_child->next_right;
+
+	if (current->next_left != nullptr)
+		current->next_left->parent = current;
+
+	left_child->parent = current->parent;
+
+	if (current->parent == nullptr)
+		root = left_child;
+	else if (current == current->parent->next_left)
+		current->parent->next_left = left_child;
 	else
-	{
-		node *child = current->next_left;
-		if (child->next_right != nullptr)
-		{
-			current->next_left = child->next_right;
-			child->next_right->parent = current;
-		}
-		else
-			current->next_left = nullptr;
-		if (current->parent != nullptr)
-			child->parent = current->parent;
-		if (current->parent == nullptr)
-			root = child;
-		else
-		{
-			if (current == current->parent->next_left)
-				current->parent->next_left = child;
-			else
-				current->parent->next_right = child;
-		}
-		child->next_right = current;
-		current->parent = child;
-	}
+		current->parent->next_right = left_child;
+
+	left_child->next_right = current;
+	current->parent = left_child;
 }
+

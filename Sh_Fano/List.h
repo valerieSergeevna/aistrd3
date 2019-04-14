@@ -20,7 +20,7 @@ private:
 			this->freq = fr;
 			this->code = {};
 		}
-
+		//string get_code() { return code; };
 		T data;
 		size_t freq;
 		string code;
@@ -28,7 +28,7 @@ private:
 		Node * next;
 	};
 
-
+	Node * current;
 	Node * head;
 	Node * tail;
 	size_t size;
@@ -58,6 +58,8 @@ public:
 	void pop_back();
 	void pop_front();
 	void print();
+	string get_code_list(size_t);
+	char get_data_list(size_t);
 	T at(size_t index) const;
 	Node* get_back() { return tail; };
 	Node* get_front() { return head; };
@@ -68,7 +70,9 @@ public:
 	void insert(T, size_t, size_t);
 	void sorting(Node*, Node*);
 	void make_group(Node*, Node*);
-
+	bool compare_str(string, string, int&);
+	//string get_code() {};
+	//string get_data() {};
 
 };
 

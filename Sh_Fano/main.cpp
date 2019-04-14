@@ -5,9 +5,11 @@
 using namespace std;
 void main() 
 {
-	string stri = "123456789";
+	string stri = "be or not to be";
+	//string stri = "123";
 	Shen_Fano_code str(stri);
-	str.encode();
+	str.encode(stri);
+	str.decode();
 	str.get_table();
 	_getch();
 }

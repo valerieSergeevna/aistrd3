@@ -146,6 +146,23 @@ void List<T>::print()
 	
 }
 template<typename T>
+string List<T>::get_code_list(size_t index)
+{
+	Node* cur = head;
+	int i = 0;
+	while (i != index) { i++; cur = cur->next; }
+	return cur->code;
+}
+
+template<typename T>
+char List<T>::get_data_list(size_t index)
+{
+	Node* cur = head;
+	int i = 0;
+	while (i != index) { i++; cur = cur->next; }
+	return cur->data;
+}
+template<typename T>
 T List<T>::at(size_t index) const
 {
 	if (index >= size) {
@@ -169,6 +186,9 @@ bool List<T>::isEmpty()
 		return true;
 	return false;
 }
+
+
+
 
 template<typename T>
 void List<T>::set(size_t index, T newElem)
@@ -381,3 +401,15 @@ void List<T>::make_group(Node *first, Node *last)
 		make_group(merge->next, last);
 	}
 }
+
+template<typename T>
+bool List<T>::compare_str(string str, string code, int &size)
+{
+	for (int i = 0; i < code.length(); i++)
+	{
+		size++;
+		if (code[i] != str[i]) return false;
+	}
+	return true;
+}
+

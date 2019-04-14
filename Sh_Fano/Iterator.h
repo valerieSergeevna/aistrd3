@@ -11,4 +11,6 @@ public:
 	virtual bool operator!=(const nullptr_t) const = 0;
 	virtual T current_key() = 0;
 	virtual bool current_color() = 0;
+//	virtual  current_node() = 0;
+
 };

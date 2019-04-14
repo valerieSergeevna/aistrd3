@@ -63,10 +63,12 @@ private:
 			this->parent = nullptr;
 			this->color = 1;
 			this->frequancy = 0;
+			this->code = {};
 
 		};
 		bool color;
 		size_t frequancy;
+		string code;
 		T key;
 		node * next_right, *next_left, *parent;
 		//unsigned int height;
@@ -81,6 +83,8 @@ public:
 	map();
 	~map();
 
+	void set_code(string str, char data) { find(data)->code = str; };
+	string get_code(char data) { return find(data)->code; };
 	class TreeIterator : public Iterator<T> {
 	protected:
 		node *current;
@@ -94,7 +98,11 @@ public:
 		T current_key() 
 		{ return current->key; }
 		bool current_color() { return current->color; }
-
+		T current_code()
+		{
+			return current->code;
+		}
+		node *get_cur() { return current; }
 	};
 
 
@@ -119,7 +127,7 @@ public:
 	void add_first(T);
 	void remove(T);
 	void delfix(node*);
-	//T2 find(T);
+	node * find(T);
 
 	List <T> get_keys();
 	T get_colors();
