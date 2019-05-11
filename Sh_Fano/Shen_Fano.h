@@ -13,9 +13,10 @@ private:
 	map < char> Map;
 
 public:
+
 	Shen_Fano_code(string&);
-	~Shen_Fano_code() {};
-	void encode(string &str);
+	~Shen_Fano_code() { delete &code; delete &decode_;}; //–≈¿À»«Œ¬¿“‹ !!!!!!!!
+	int encode(string &str);
 	void decode();
 	void get_table();
 	bool code_compare_for_test(string check_array, string code);

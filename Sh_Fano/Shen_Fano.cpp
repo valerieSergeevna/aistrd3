@@ -6,7 +6,7 @@
 Shen_Fano_code::Shen_Fano_code(string &str)
 {
 	//map < char> Map;
-
+	if (str.empty()) throw out_of_range("string is empty");
 	size_t i = 0;
 	while (i != str.length())
 	{
@@ -20,16 +20,17 @@ Shen_Fano_code::Shen_Fano_code(string &str)
 		Map.set_code(sort.get_code_list(j), sort.get_data_list(j));
 }
 
-void Shen_Fano_code::encode(string &str)
+int Shen_Fano_code::encode(string &str)
 {
-
+	
 	size_t i = 0;
 	while ( i != str.length())
 	{
 		code = code + Map.get_code(str[i]);
 		i++;
 	}
-	std::cout << code << '\n';
+	std::cout << code << " memmory: " << size(code) <<'\n' ;
+	return (size(code));
 }
 
 void Shen_Fano_code::decode()
@@ -52,7 +53,7 @@ void Shen_Fano_code::decode()
 		}
 	}
 	//}
-	std::cout << '\n';
+	std::cout << '\n' ;
 }
 
 void Shen_Fano_code::get_table()

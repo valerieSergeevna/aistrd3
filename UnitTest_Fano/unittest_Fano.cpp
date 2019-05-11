@@ -106,5 +106,18 @@ namespace UnitTest_Fano
 			}
 		}
 
+		TEST_METHOD(check_empty)
+		{
+
+			string stri = "";
+		
+			try {
+				Shen_Fano_code str(stri);
+			}
+			catch(const std::out_of_range& error)
+			{
+				Assert::AreEqual("string is empty", error.what());
+			}	
+		}
 	};
 }
